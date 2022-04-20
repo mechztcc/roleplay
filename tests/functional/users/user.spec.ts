@@ -1,4 +1,6 @@
+import Database from '@ioc:Adonis/Lucid/Database';
 import { test } from '@japa/runner';
+import { UserFactory } from 'Database/factories';
 
 
 test.group('Users user', () => {
@@ -16,5 +18,24 @@ test.group('Users user', () => {
 
     assert.exists(body.id, 'Failed to create user');
     assert.notExists(body.password, 'Password defined');
+  })
+  
+  test('Its should return 409 when email is already in use', async ({ assert, client }) => {
+    const { email } = await UserFactory.create();
+
+    const response = await client.post('/users').json({
+      email,
+      username: 'test',
+      password: '123456'
+    });
+
+    response.assertStatus(409);
+    
+  }).setup(async () => {
+    await Database.beginGlobalTransaction();
+  })
+
+  .teardown(async () => {
+    await Database.rollbackGlobalTransaction();
   })
 })
