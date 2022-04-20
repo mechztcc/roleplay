@@ -32,13 +32,6 @@ test.group('Users user', () => {
 
     response.assertBody({ code: 'BAD_REQUEST', message: 'Email already in use', status: 409 })
   })
-  .setup(async () => {
-    await Database.beginGlobalTransaction()
-  })
-
-  .teardown(async () => {
-    await Database.rollbackGlobalTransaction()
-  })
 
   test('Its should return BAD_REQUEST when username already in use', async ({ client }) => {
     const { username } = await UserFactory.create()
@@ -50,5 +43,12 @@ test.group('Users user', () => {
     })
 
     response.assertBody({ code: 'BAD_REQUEST', message: 'User name already in use', status: 409 })
+  })
+
+  test('It should return 422 when required data is not provided', async ({ client }) => {
+    const response = await client.post('/users').json({})
+
+    response.assertBodyContains({ code: 'BAD_REQUEST' })
+    response.assertStatus(422)
   })
 })
