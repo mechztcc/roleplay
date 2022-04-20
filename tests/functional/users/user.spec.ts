@@ -1,4 +1,6 @@
-import { test } from '@japa/runner'
+import { test } from '@japa/runner';
+// import { execaNode } from 'execa';
+
 
 test.group('Users user', () => {
   test('Its should be create a user', async ({ client, assert }) => {
@@ -15,4 +17,10 @@ test.group('Users user', () => {
 
     assert.exists(body.id, 'Failed to create user')
   })
+    .setup(async () => {
+      // await execaNode('ace', ['migration:run'])
+    })
+    .teardown(() => {
+      console.log('desfaz a migration aqui')
+    })
 })

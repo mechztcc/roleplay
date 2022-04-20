@@ -6,6 +6,6 @@ export default class UsersController {
     const payload = request.only(['email', 'username', 'password', 'avatar']);
 
 		const user = await User.create(payload);
-		return user;
+		return response.status(201).send(user);
   }
 }
