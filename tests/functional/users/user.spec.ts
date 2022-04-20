@@ -1,5 +1,4 @@
 import { test } from '@japa/runner';
-// import { execaNode } from 'execa';
 
 
 test.group('Users user', () => {
@@ -15,12 +14,7 @@ test.group('Users user', () => {
     const body = response.body()
     response.assertStatus(201)
 
-    assert.exists(body.id, 'Failed to create user')
+    assert.exists(body.id, 'Failed to create user');
+    assert.notExists(body.password, 'Password defined');
   })
-    .setup(async () => {
-      // await execaNode('ace', ['migration:run'])
-    })
-    .teardown(() => {
-      console.log('desfaz a migration aqui')
-    })
 })
