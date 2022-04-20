@@ -51,4 +51,18 @@ test.group('Users user', () => {
     response.assertBodyContains({ code: 'BAD_REQUEST' })
     response.assertStatus(422)
   })
+
+  test('It should return 422 when password has incorrect format', async ({ client }) => {
+    const response = await client.post('/users').json({ username: 'danixhenian', email: 'alberto@email.com', password: '123' })
+
+    response.assertBodyContains({ code: 'BAD_REQUEST' })
+    response.assertStatus(422)
+  })
+
+  test('It should return 422 when provided an invalid email', async ({ client }) => {
+    const response = await client.post('/users').json({ username: 'danixhenian', email: 'albertomail.com', password: '123456' })
+
+    response.assertBodyContains({ code: 'BAD_REQUEST' })
+    response.assertStatus(422)
+  })
 })
