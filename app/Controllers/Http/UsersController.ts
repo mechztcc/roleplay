@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import BadRequestException from 'App/Exceptions/BadRequestException'
 import User from 'App/Models/User'
 
 export default class UsersController {
@@ -7,7 +8,7 @@ export default class UsersController {
 
     const userExists = await User.findBy('email', payload.email)
     if (userExists) {
-      return response.conflict({ message: 'Email already in use ' })
+      throw new BadRequestException('Email already in use', 409)
     }
 
     const user = await User.create(payload)
