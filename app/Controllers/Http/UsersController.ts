@@ -11,6 +11,11 @@ export default class UsersController {
       throw new BadRequestException('Email already in use', 409)
     }
 
+    const userNameExists = await User.findBy('username', payload.username);
+    if(userNameExists) {
+      throw new BadRequestException('User name already in use', 409)
+    }
+
     const user = await User.create(payload)
     return response.status(201).send(user)
   }
