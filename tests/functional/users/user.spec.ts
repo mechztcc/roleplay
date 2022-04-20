@@ -1,7 +1,6 @@
-import Database from '@ioc:Adonis/Lucid/Database';
-import { test } from '@japa/runner';
-import { UserFactory } from 'Database/factories';
-
+import Database from '@ioc:Adonis/Lucid/Database'
+import { test } from '@japa/runner'
+import { UserFactory } from 'Database/factories'
 
 test.group('Users user', () => {
   test('Its should be create a user', async ({ client, assert }) => {
@@ -14,28 +13,30 @@ test.group('Users user', () => {
 
     const response = await client.post('/users').json(userPayload)
     const body = response.body()
+
     response.assertStatus(201)
 
-    assert.exists(body.id, 'Failed to create user');
-    assert.notExists(body.password, 'Password defined');
+    assert.exists(body.id, 'Failed to create user')
+    assert.notExists(body.password, 'Password defined')
   })
-  
+
   test('Its should return 409 when email is already in use', async ({ assert, client }) => {
-    const { email } = await UserFactory.create();
+    const { email } = await UserFactory.create()
 
     const response = await client.post('/users').json({
       email,
       username: 'test',
-      password: '123456'
-    });
+      password: '123456',
+    })
 
-    response.assertStatus(409);
-    
-  }).setup(async () => {
-    await Database.beginGlobalTransaction();
-  })
+    response.assertBody({ code: 'BAD_REQUEST', message: 'Email already in use', status: 409 });
 
-  .teardown(async () => {
-    await Database.rollbackGlobalTransaction();
   })
+    .setup(async () => {
+      await Database.beginGlobalTransaction()
+    })
+
+    .teardown(async () => {
+      await Database.rollbackGlobalTransaction()
+    })
 })
