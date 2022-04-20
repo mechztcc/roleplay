@@ -1,5 +1,6 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
+import User from 'App/Models/User'
 import { UserFactory } from 'Database/factories'
 
 test.group('Users user', () => {
@@ -29,14 +30,25 @@ test.group('Users user', () => {
       password: '123456',
     })
 
-    response.assertBody({ code: 'BAD_REQUEST', message: 'Email already in use', status: 409 });
-
+    response.assertBody({ code: 'BAD_REQUEST', message: 'Email already in use', status: 409 })
   })
-    .setup(async () => {
-      await Database.beginGlobalTransaction()
+  .setup(async () => {
+    await Database.beginGlobalTransaction()
+  })
+
+  .teardown(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('Its should return BAD_REQUEST when username already in use', async ({ client }) => {
+    const { username } = await UserFactory.create()
+
+    const response = await client.post('/users').json({
+      email: 'novoemail@email.com',
+      username,
+      password: '123456',
     })
 
-    .teardown(async () => {
-      await Database.rollbackGlobalTransaction()
-    })
+    response.assertBody({ code: 'BAD_REQUEST', message: 'User name already in use', status: 409 })
+  })
 })
