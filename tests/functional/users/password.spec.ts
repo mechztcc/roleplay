@@ -1,3 +1,4 @@
+import Mail from '@ioc:Adonis/Addons/Mail'
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
 
