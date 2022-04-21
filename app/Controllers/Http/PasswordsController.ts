@@ -29,7 +29,18 @@ export default class PasswordsController {
   }
 
   public async resetPassword({ response, request }: HttpContextContract) {
-    return response.noContent();
+    const { token, password } = request.only(['token', 'password'])
 
+    const userByToken = await User.query()
+      .whereHas('tokens', (query) => {
+        query.where('token', token)
+      })
+      .firstOrFail()
+
+    userByToken.password = password
+
+    await userByToken.save()
+
+    return response.noContent()
   }
 }
