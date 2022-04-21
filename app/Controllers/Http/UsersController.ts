@@ -22,10 +22,18 @@ export default class UsersController {
   }
 
   public async update({ response, request }: HttpContextContract) {
-    const payload = request.only(['email', 'password', 'username'])
+    const payload = request.only(['email', 'password', 'avatar'])
 
     const id = request.param('id')
-    const userExists = await User.find(id);
-    return { id: userExists?.id }
+
+    const userExists = await User.findOrFail(id)
+
+    userExists.email = payload.email
+    userExists.password = payload.password
+    userExists.avatar = payload.avatar
+
+    await userExists.save()
+
+    return userExists;
   }
 }
