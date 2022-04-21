@@ -1,4 +1,4 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ForgotPasswordValidator {
@@ -6,7 +6,7 @@ export default class ForgotPasswordValidator {
 
 
   public schema = schema.create({
-    email: schema.string(),
+    email: schema.string({}, [rules.email()]),
     resetPasswordUrl: schema.string()
   })
 
