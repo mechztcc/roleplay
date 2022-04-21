@@ -29,7 +29,7 @@ export default class PasswordsController {
   }
 
   public async resetPassword({ response, request }: HttpContextContract) {
-    
+    return response.noContent();
 
   }
 }

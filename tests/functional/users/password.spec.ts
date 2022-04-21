@@ -1,5 +1,6 @@
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
+import Hash from '@ioc:Adonis/Core/Hash';
 
 test.group('Users password', () => {
   test('It should send a email with forgot password instructions', async ({ client }) => {
@@ -45,8 +46,15 @@ test.group('Users password', () => {
     const user = await UserFactory.create()
     const { token } = await user.related('tokens').create({ token: 'token' })
 
-    const response = await client.post('/reset-password').json({ token, password: user.password })
+    const response = await client.post('/reset-password').json({ token, password: '1234567'});
 
+    await user.refresh();
+
+    const checkPassword = await Hash.verify(user.password, '1234567');
+    
+    console.log(checkPassword);
+    
+    assert.isTrue(checkPassword);
     response.assertStatus(204);
   })
 })
