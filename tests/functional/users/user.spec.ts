@@ -75,9 +75,18 @@ test.group('Users user', () => {
 
     const response = await client
       .put(`/users/${id}`)
-      .json({ email: 'email1@email.com', avatar: 'http://images.com/images/2', password });
+      .json({ email: 'email1@email.com', avatar: 'http://images.com/images/2', password })
 
-    response.assertStatus(200);
-    response.assertBodyContains({ id });
+    response.assertStatus(200)
+    response.assertBodyContains({ id })
+  })
+
+  test('It should return 422 when try to update a user password with invalid format', async ({ client }) => {
+    const { id, email, avatar } = await UserFactory.create()
+
+    const response = await client.put(`/users/${id}`).json({ email, avatar, password: '6543' })
+
+    response.assertStatus(422)
+    response.assertBodyContains({ code: 'BAD_REQUEST' })
   })
 })
