@@ -25,13 +25,28 @@ test.group('Users password', () => {
     assert.isNotEmpty(tokens)
   })
 
-  test('Its should return 422 when required data is not provided or invalid', async ({ client, assert }) => {
-    const user = await UserFactory.create();
+  test('Its should return 422 when required data is not provided or invalid', async ({
+    client,
+    assert,
+  }) => {
+    const user = await UserFactory.create()
 
-    const response = await client.post('/forgot-password').json({ });
+    const response = await client.post('/forgot-password').json({})
 
-    response.assertBodyContains({ code: 'BAD_REQUEST', message: 'E_VALIDATION_FAILURE: Validation Exception', errors: [] })
+    response.assertBodyContains({
+      code: 'BAD_REQUEST',
+      message: 'E_VALIDATION_FAILURE: Validation Exception',
+      errors: [],
+    })
     response.assertStatus(422)
+  })
 
+  test('Its should be able to reset password', async ({ client, assert }) => {
+    const user = await UserFactory.create()
+    const { token } = await user.related('tokens').create({ token: 'token' })
+
+    const response = await client.post('/reset-password').json({ token, password: user.password })
+
+    response.assertStatus(204);
   })
 })
