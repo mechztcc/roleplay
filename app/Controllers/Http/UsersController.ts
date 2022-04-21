@@ -5,7 +5,7 @@ import CreateUserValidator from 'App/Validators/CreateUserValidator'
 
 export default class UsersController {
   public async store({ response, request }: HttpContextContract) {
-    const payload = await request.validate(CreateUserValidator);
+    const payload = await request.validate(CreateUserValidator)
 
     const userExists = await User.findBy('email', payload.email)
     if (userExists) {
@@ -22,6 +22,10 @@ export default class UsersController {
   }
 
   public async update({ response, request }: HttpContextContract) {
-    
+    const payload = request.only(['email', 'password', 'username'])
+
+    const id = request.param('id')
+    const userExists = await User.find(id);
+    return { id: userExists?.id }
   }
 }
