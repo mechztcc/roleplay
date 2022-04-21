@@ -20,4 +20,8 @@ export default class UsersController {
     const user = await User.create(payload)
     return response.status(201).send(user)
   }
+
+  public async update({ response, request }: HttpContextContract) {
+    
+  }
 }

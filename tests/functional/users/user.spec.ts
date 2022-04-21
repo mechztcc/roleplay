@@ -77,6 +77,7 @@ test.group('Users user', () => {
       .put(`/users/${id}`)
       .json({ email: 'email1@email.com', avatar: 'http://images.com/images/2', password });
 
-    response.assertStatus(200)
+    response.assertStatus(200);
+    response.assertBodyContains({ id });
   })
 })
