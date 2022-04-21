@@ -24,4 +24,14 @@ test.group('Users password', () => {
 
     assert.isNotEmpty(tokens)
   })
+
+  test('Its should return 422 when required data is not provided or invalid', async ({ client, assert }) => {
+    const user = await UserFactory.create();
+
+    const response = await client.post('/forgot-password').json({ });
+
+    response.assertBodyContains({ code: 'BAD_REQUEST', message: 'E_VALIDATION_FAILURE: Validation Exception', errors: [] })
+    response.assertStatus(422)
+
+  })
 })
