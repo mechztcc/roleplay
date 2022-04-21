@@ -81,12 +81,26 @@ test.group('Users user', () => {
     response.assertBodyContains({ id })
   })
 
-  test('It should return 422 when try to update a user password with invalid format', async ({ client }) => {
+  test('It should return 422 when try to update a user password with invalid format', async ({
+    client,
+  }) => {
     const { id, email, avatar } = await UserFactory.create()
 
     const response = await client.put(`/users/${id}`).json({ email, avatar, password: '6543' })
 
     response.assertStatus(422)
     response.assertBodyContains({ code: 'BAD_REQUEST' })
+  })
+
+  test('It should return 404 when try to update a nonexistent user', async ({ client }) => {
+    const { email, avatar } = await UserFactory.create()
+    const invalidId = 555
+
+    const response = await client
+      .put(`/users/${invalidId}`)
+      .json({ email, avatar, password: '654321' })
+
+    response.assertStatus(404)
+    response.assertBodyContains({ message: 'E_ROW_NOT_FOUND: Row not found' })
   })
 })
