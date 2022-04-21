@@ -53,16 +53,30 @@ test.group('Users user', () => {
   })
 
   test('It should return 422 when password has incorrect format', async ({ client }) => {
-    const response = await client.post('/users').json({ username: 'danixhenian', email: 'alberto@email.com', password: '123' })
+    const response = await client
+      .post('/users')
+      .json({ username: 'danixhenian', email: 'alberto@email.com', password: '123' })
 
     response.assertBodyContains({ code: 'BAD_REQUEST' })
     response.assertStatus(422)
   })
 
   test('It should return 422 when provided an invalid email', async ({ client }) => {
-    const response = await client.post('/users').json({ username: 'danixhenian', email: 'albertomail.com', password: '123456' })
+    const response = await client
+      .post('/users')
+      .json({ username: 'danixhenian', email: 'albertomail.com', password: '123456' })
 
     response.assertBodyContains({ code: 'BAD_REQUEST' })
     response.assertStatus(422)
+  })
+
+  test('Its should update an user', async ({ client }) => {
+    const { id, password } = await UserFactory.create()
+
+    const response = await client
+      .put(`/users/${id}`)
+      .json({ email: 'email1@email.com', avatar: 'http://images.com/images/2', password });
+
+    response.assertStatus(200)
   })
 })
