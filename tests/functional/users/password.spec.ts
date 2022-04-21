@@ -9,9 +9,8 @@ test.group('Users password', () => {
     const response = await client.post('/forgot-password').json({
       email: user.email,
       resetPasswordUrl: 'url',
-    });
+    })
 
-    response.assertStatus(204);
-    
+    response.assertStatus(204)
   })
 })
