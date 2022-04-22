@@ -10,6 +10,6 @@ export default class SessionsController {
 
     await auth.attempt(payload.email, payload.password)
 
-    return response.noContent()
+    return response.created({ user: auth.user })
   }
 }
