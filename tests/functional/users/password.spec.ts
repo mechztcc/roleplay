@@ -55,4 +55,14 @@ test.group('Users password', () => {
     assert.isTrue(checkPassword)
     response.assertStatus(204)
   })
+
+  test('Its should return 422 when required data is not provided to reset password', async ({ client, assert}) => {
+    const response = await client.post('/reset-password');
+
+    response.assertBodyContains({
+      code: 'BAD_REQUEST',
+      message: 'E_VALIDATION_FAILURE: Validation Exception',
+      errors: [],
+    })
+  })
 })
