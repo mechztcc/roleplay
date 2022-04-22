@@ -1,6 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
-import User from 'App/Models/User'
 import { UserFactory } from 'Database/factories'
 
 test.group('Users user', () => {
