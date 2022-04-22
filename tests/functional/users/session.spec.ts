@@ -31,6 +31,22 @@ test.group('Users sessions', () => {
     })
   })
 
+  test('Its should return an error if the provided user has not found', async ({
+    client,
+    assert,
+  }) => {
+    const plainPassword = '123456'
+    const nonexistsUser = 'usernotfound@email.com'
+    const user = await UserFactory.merge({ password: plainPassword }).create()
+
+    const response = await client
+      .post('/sessions')
+      .json({ email: nonexistsUser, password: plainPassword })
+
+    response.assertStatus(400)
+    response.assertBodyContains({ errors: [{ message: 'E_INVALID_AUTH_UID: User not found' }] })
+  })
+
   test('Its should return an api token when create a session', async ({ client, assert }) => {
     const plainPassword = '123456'
     const user = await UserFactory.merge({ password: plainPassword }).create()
