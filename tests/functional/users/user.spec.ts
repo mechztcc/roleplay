@@ -101,6 +101,6 @@ test.group('Users user', () => {
       .json({ email, avatar, password: '654321' })
 
     response.assertStatus(404)
-    response.assertBodyContains({ message: 'E_ROW_NOT_FOUND: Row not found' })
+    response.assertBodyContains({ code: 'BAD_REQUEST', message: 'Resource not found', status: 404 })
   })
 })

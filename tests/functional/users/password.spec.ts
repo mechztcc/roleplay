@@ -106,8 +106,8 @@ test.group('Users password', () => {
       await user.refresh()
       const checkPassword = await Hash.verify(user.password, '1234567')
 
-      assert.isTrue(checkPassword)
-      response.assertStatus(410)
+      assert.isFalse(checkPassword)
+      response.assertBody({ code: 'TOKEN_EXPIRED', message: 'Token has expired', status: 410 })
     })
   })
 })
