@@ -39,6 +39,13 @@ export default class ExceptionHandler extends HttpExceptionHandler {
         status: 404,
       })
     }
+    else if(error.message === 'E_INVALID_AUTH_UID: User not found') {
+      return ctx.response.status(error.status).send({
+        code: 'BAD_REQUEST',
+        message: 'Invalid credentials',
+        status: 400,
+      })
+    }
     return super.handle(error, ctx)
   }
 }
