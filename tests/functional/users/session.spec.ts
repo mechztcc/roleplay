@@ -44,7 +44,11 @@ test.group('Users sessions', () => {
       .json({ email: nonexistsUser, password: plainPassword })
 
     response.assertStatus(400)
-    response.assertBodyContains({ errors: [{ message: 'E_INVALID_AUTH_UID: User not found' }] })
+    response.assertBodyContains({
+      code: 'BAD_REQUEST',
+      status: 400,
+      message: 'Invalid credentials',
+    })
   })
 
   test('Its should return an api token when create a session', async ({ client, assert }) => {
