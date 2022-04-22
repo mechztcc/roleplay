@@ -40,6 +40,8 @@ export default class PasswordsController {
 
     userByToken.password = payload.password
 
+    await userByToken.tokens[0].delete()
+
     await userByToken.save()
 
     return response.noContent()

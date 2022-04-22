@@ -65,4 +65,20 @@ test.group('Users password', () => {
       errors: [],
     })
   })
+
+  test('Its should return 404 when use the same token twice', async ({client, assert}) => {
+    const user = await UserFactory.create()
+    const { token } = await user.related('tokens').create({ token: 'token' })
+
+    const response = await client.post('/reset-password').json({ token, password: '1234567' })
+
+    await user.refresh()
+    const checkPassword = await Hash.verify(user.password, '1234567')
+
+    assert.isTrue(checkPassword)
+    response.assertStatus(204)
+
+    const tryagain = await client.post('/reset-password').json({ token, password: '1234567' })
+    tryagain.assertStatus(404)
+  })
 })
