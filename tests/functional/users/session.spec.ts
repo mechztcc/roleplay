@@ -65,4 +65,25 @@ test.group('Users sessions', () => {
     assert.equal(body.user.id, user.id, 'User undefined')
     assert.isDefined(body.token, 'User token not generated')
   })
+
+  test('Its should return 200 when user signs out', async ({ client, assert }) => {
+    const plainPassword = '123456'
+    const user = await UserFactory.merge({ password: plainPassword }).create()
+
+    const response = await client
+      .post('/sessions')
+      .json({ email: user.email, password: plainPassword })
+
+    const body = response.body()
+    const { token } = body.token
+
+    response.assertStatus(201)
+    assert.equal(body.user.id, user.id, 'User undefined')
+    assert.isDefined(body.token, 'User token not generated')
+
+    const tryAgain = await client.delete('/sessions').headers({ Authorization: `Bearer ${token}` })
+    
+    console.log(tryAgain);
+    tryAgain.assertStatus(200)
+  })
 })
