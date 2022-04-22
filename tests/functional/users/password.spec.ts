@@ -80,5 +80,11 @@ test.group('Users password', () => {
 
     const tryagain = await client.post('/reset-password').json({ token, password: '1234567' })
     tryagain.assertStatus(404)
+
+    tryagain.assertBodyContains({
+      code: 'BAD_REQUEST',
+      message: 'Resource not found',
+      status: 404
+    })
   })
 })

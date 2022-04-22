@@ -32,6 +32,13 @@ export default class ExceptionHandler extends HttpExceptionHandler {
         errors: error['messages']?.errors ? error['messages'].errors : ''
       })
     }
+    else if(error.message === 'E_ROW_NOT_FOUND: Row not found') {
+      return ctx.response.status(error.status).send({
+        code: 'BAD_REQUEST',
+        message: 'Resource not found',
+        status: 404,
+      })
+    }
     return super.handle(error, ctx)
   }
 }

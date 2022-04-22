@@ -36,6 +36,7 @@ export default class PasswordsController {
       .whereHas('tokens', (query) => {
         query.where('token', payload.token)
       })
+      .preload('tokens')
       .firstOrFail()
 
     userByToken.password = payload.password
