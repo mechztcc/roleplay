@@ -1,3 +1,4 @@
+import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
 
@@ -83,7 +84,9 @@ test.group('Users sessions', () => {
 
     const tryAgain = await client.delete('/sessions').headers({ Authorization: `Bearer ${token}` })
     
-    console.log(tryAgain);
+    const notFoundToken = await Database.query().select('*').from('api_tokens').where('user_id', user.id)
+
     tryAgain.assertStatus(200)
+    assert.isEmpty(notFoundToken)
   })
 })
