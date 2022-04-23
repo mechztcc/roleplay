@@ -17,7 +17,7 @@ test.group('Group group', () => {
     const response = await client.post('/groups').json(groupPayload)
 
     response.assertStatus(201)
-    response.assertBodyContains({ master: user.id, id: 1 })
+    response.assertBodyContains({ master: user.id, id: 1, players: [] })
   })
 
   test('It should return 422 when required data its not provided', async ({ client }) => {
