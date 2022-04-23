@@ -18,7 +18,8 @@ test.group('Group group', () => {
     const response = await client.post('/groups').json(groupPayload)
 
     const body = response.body()
-
+  
     response.assertStatus(201)
+    response.assertBodyContains({ master: user.id, id: 1 })
   })
 })
