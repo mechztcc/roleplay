@@ -7,6 +7,8 @@ export default class GroupsController {
     const payload = await request.validate(GroupsCreateValidator)
 
     const group = await Group.create(payload)
+    console.log(group);
+    
     return response.created(group)
   }
 }
