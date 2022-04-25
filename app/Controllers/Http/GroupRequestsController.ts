@@ -36,6 +36,10 @@ export default class GroupRequestsController {
   public async index({ request, response }: HttpContextContract) {
     const { master } = request.qs()
 
+    if(!master) {
+      throw new BadRequestException('master query should be provided', 422);
+    }
+
     const groupsRequests = await GroupRequest.query()
       .select('id', 'group_id', 'user_id', 'status')
       .preload('group', (query) => {
