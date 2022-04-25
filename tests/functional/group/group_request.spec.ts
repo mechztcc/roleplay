@@ -2,13 +2,30 @@ import { test } from '@japa/runner'
 import { GroupFactory, UserFactory } from 'Database/factories'
 
 test.group('Group request', () => {
-  test('It should create a group request', async ({ client, assert}) => {
+  test('It should create a group request', async ({ client, assert }) => {
+    const plainPassword = '123456'
+    const user = await UserFactory.merge({ password: plainPassword }).create()
 
-    const master = await UserFactory.create();
-    const group = await GroupFactory.merge({ master: master.id}).create()
+    const login = await client
+      .post('/sessions')
+      .json({ email: user.email, password: plainPassword })
 
-    const response = await client.post(`/groups/${group.id}/requests`)
+    const body = login.body()
+    login.assertStatus(201)
 
+    const master = await UserFactory.create()
+    const group = await GroupFactory.merge({ master: master.id }).create()
+
+    const response = await client
+      .post(`/groups/${group.id}/requests`)
+      .header('Authorization', `Bearer ${body.token.token}`)
+
+    const responseBody = response.body()
+
+    assert.exists(responseBody.id, 'Request id not found')  
+    assert.exists(responseBody.group_id, 'Group id not found')  
+    assert.exists(responseBody.user_id, 'User id not found')  
+    assert.exists(responseBody.status, 'Status not found')  
     response.assertStatus(201)
   })
 })
