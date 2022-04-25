@@ -1,4 +1,5 @@
 import { test } from '@japa/runner'
+import User from 'App/Models/User'
 import { GroupFactory, UserFactory } from 'Database/factories'
 
 test.group('Group request', () => {
@@ -22,10 +23,10 @@ test.group('Group request', () => {
 
     const responseBody = response.body()
 
-    assert.exists(responseBody.id, 'Request id not found')  
-    assert.exists(responseBody.group_id, 'Group id not found')  
-    assert.exists(responseBody.user_id, 'User id not found')  
-    assert.exists(responseBody.status, 'Status not found')  
+    assert.exists(responseBody.id, 'Request id not found')
+    assert.exists(responseBody.group_id, 'Group id not found')
+    assert.exists(responseBody.user_id, 'User id not found')
+    assert.exists(responseBody.status, 'Status not found')
     response.assertStatus(201)
   })
 
@@ -53,4 +54,5 @@ test.group('Group request', () => {
 
     response.assertStatus(409)
   })
+
 })
