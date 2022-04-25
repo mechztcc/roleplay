@@ -34,3 +34,5 @@ Route.post('/sessions', 'SessionsController.store')
 Route.delete('/sessions', 'SessionsController.destroy')
 
 Route.post('/groups', 'GroupsController.store')
+
+Route.post('/groups/:id/request', 'GroupRequestsController.store')
