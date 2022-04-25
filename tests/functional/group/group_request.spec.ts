@@ -72,12 +72,19 @@ test.group('Group request', () => {
       .post(`/groups/${group.id}/requests`)
       .header('Authorization', `Bearer ${body.token.token}`)
 
-
     const response = await client.get(`/groups/${group.id}/requests?master=${user.id}`)
 
     const returno = response.body()
-    console.log(returno);
-    
+    console.log(returno)
+
+    response.assertBodyContains([
+      {
+        user_id: user.id,
+        status: 'PENDING' || 'ACCEPTED',
+        group: {},
+        user: {},
+      },
+    ])
 
     response.assertStatus(202)
   })

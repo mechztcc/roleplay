@@ -34,12 +34,15 @@ export default class GroupRequestsController {
   }
 
   public async index({ request, response }: HttpContextContract) {
+    const { master } = request.qs()
 
-    const {master} = request.qs() 
-
-    const groupsRequests = await GroupRequest.query().whereHas('group', (query) => {
-      query.where('master', Number(master))
-    }).where('status', 'PENDING')
+    const groupsRequests = await GroupRequest.query()
+      .preload('group')
+      .preload('user')
+      .whereHas('group', (query) => {
+        query.where('master', Number(master))
+      })
+      .where('status', 'PENDING')
 
     return response.accepted(groupsRequests)
   }
