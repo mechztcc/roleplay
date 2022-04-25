@@ -56,11 +56,26 @@ test.group('Group request', () => {
   })
 
   test('Its should list group requests by master', async ({ client, assert }) => {
-    const master = await UserFactory.create()
+    const plainPassword = '123456'
+    const user = await UserFactory.merge({ password: plainPassword }).create()
 
-    const group = await GroupFactory.merge({ master: master.id }).create()
+    const login = await client
+      .post('/sessions')
+      .json({ email: user.email, password: plainPassword })
 
-    const response = await client.get(`/groups/${group.id}/requests?master=${master.id}`)
+    const body = login.body()
+    login.assertStatus(201)
+
+    const group = await GroupFactory.merge({ master: user.id }).create()
+
+    await client
+      .post(`/groups/${group.id}/requests`)
+      .header('Authorization', `Bearer ${body.token.token}`)
+
+
+    const response = await client.get(`/groups/${group.id}/requests?master=${user.id}`)
+
+    response.assertBodyContains({ groupRequests: []})
 
     response.assertStatus(200)
   })
