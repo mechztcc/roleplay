@@ -27,6 +27,7 @@ export default class GroupRequestsController {
     if (userGroupExists) {
       throw new BadRequestException('user is already in this group')
     }
+    
 
     const groupRequest = await GroupRequest.create({ groupId, userId })
     await groupRequest.refresh()

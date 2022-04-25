@@ -55,4 +55,13 @@ test.group('Group request', () => {
     response.assertStatus(409)
   })
 
+  test('Its should list group requests by master', async ({ client, assert }) => {
+    const master = await UserFactory.create()
+
+    const group = await GroupFactory.merge({ master: master.id }).create()
+
+    const response = await client.get(`/groups/${group.id}/requests?master=${master.id}`)
+
+    response.assertStatus(200)
+  })
 })
