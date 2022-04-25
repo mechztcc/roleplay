@@ -75,8 +75,10 @@ test.group('Group request', () => {
 
     const response = await client.get(`/groups/${group.id}/requests?master=${user.id}`)
 
-    response.assertBodyContains({ groupRequests: []})
+    const returno = response.body()
+    console.log(returno);
+    
 
-    response.assertStatus(200)
+    response.assertStatus(202)
   })
 })
