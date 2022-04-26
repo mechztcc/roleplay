@@ -56,5 +56,17 @@ export default class GroupRequestsController {
     return response.accepted(groupsRequests)
   }
 
-  public async accept({ request, response }: HttpContextContract) {}
+  public async accept({ request, response }: HttpContextContract) {
+    const requestId = request.param('requestId') as number
+    const groupId = request.param('groupId') as number
+
+    const groupRequest = await GroupRequest.query()
+      .where('id', requestId)
+      .andWhere('groupId', groupId)
+      .firstOrFail()
+
+    const updated = groupRequest.merge({ status: 'ACCEPTED' }).save()
+
+    return response.ok({ updated })
+  }
 }
