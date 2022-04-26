@@ -13,4 +13,8 @@ export default class GroupsController {
 
     return response.created(group)
   }
+
+  public async update({ request, response}: HttpContextContract) {
+    const payload = request.all()
+  }
 }
