@@ -25,7 +25,13 @@ export default class GroupsController {
     return response.ok({ updatedGroup })
   }
 
-  public async removePlayer({ request, response}: HttpContextContract) {
-    
+  public async removePlayer({ request, response }: HttpContextContract) {
+    const groupId = request.param('groupId')
+    const playerId = request.param('playerId')
+
+    const group = await Group.findOrFail(groupId)
+
+    group.related('players').detach([playerId])
+    return response.ok({})
   }
 }
