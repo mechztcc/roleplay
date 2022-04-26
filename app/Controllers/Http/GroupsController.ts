@@ -39,4 +39,8 @@ export default class GroupsController {
     group.related('players').detach([playerId])
     return response.ok({})
   }
+
+  public async destroy({ request, response}: HttpContextContract) {
+    return response.ok({})
+  }
 }
