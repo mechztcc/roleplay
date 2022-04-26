@@ -14,7 +14,14 @@ export default class GroupsController {
     return response.created(group)
   }
 
-  public async update({ request, response}: HttpContextContract) {
+  public async update({ request, response }: HttpContextContract) {
+    const id = request.param('id')
     const payload = request.all()
+
+    const group = await Group.findOrFail(id)
+
+    const updatedGroup = await group.merge(payload).save()
+
+    return response.ok({ updatedGroup })
   }
 }
