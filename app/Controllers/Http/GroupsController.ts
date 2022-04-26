@@ -24,4 +24,8 @@ export default class GroupsController {
 
     return response.ok({ updatedGroup })
   }
+
+  public async removePlayer({ request, response}: HttpContextContract) {
+    
+  }
 }

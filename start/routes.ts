@@ -36,6 +36,9 @@ Route.delete('/sessions', 'SessionsController.destroy')
 Route.post('/groups', 'GroupsController.store')
 Route.put('/groups/:id', 'GroupsController.update')
 
+Route.delete('/groups/:groupId/players/:playerId', 'GroupsController.removePlayer')
+
+
 Route.post('/groups/:groupId/requests', 'GroupRequestsController.store').middleware('auth')
 Route.get('/groups/:groupId/requests', 'GroupRequestsController.index')
 
