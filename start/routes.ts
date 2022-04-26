@@ -39,3 +39,4 @@ Route.post('/groups/:groupId/requests', 'GroupRequestsController.store').middlew
 Route.get('/groups/:groupId/requests', 'GroupRequestsController.index')
 
 Route.post('/groups/:groupId/requests/:requestId/accept', 'GroupRequestsController.accept')
+Route.delete('/groups/:groupId/requests/:requestId/destroy', 'GroupRequestsController.destroy')
